@@ -1237,6 +1237,14 @@
     "@fullcalendar/common" "~5.4.0"
     "tslib" "^2.0.3"
 
+"@fullcalendar/react@^5.4.0":
+  "integrity" "sha512-FtTuD40jdbSzttKmC6PHLnoJSNrw48oq/zbjZ2Qm/94YPEuGULJ0YMjftGTg6pGxBhJf7LiC1bU5eM92iwIYZA=="
+  "resolved" "https://registry.npmjs.org/@fullcalendar/react/-/react-5.4.0.tgz"
+  "version" "5.4.0"
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    "tslib" "^2.0.3"
+
 "@fullcalendar/timegrid@^5.4.0":
   "integrity" "sha512-/b3ZeZVEZf2BxC8mJ6nHW2XZY9mKbN+RpZbdocEiQniGqYq0o3hqGz0FXMA+JSTE6lGjo747RE3b5p295avw7A=="
   "resolved" "https://registry.npmjs.org/@fullcalendar/timegrid/-/timegrid-5.4.0.tgz"
@@ -10910,7 +10918,7 @@
     "strip-ansi" "6.0.0"
     "text-table" "0.2.0"
 
-"react-dom@*", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.1", "react-dom@>=16.6.0":
+"react-dom@*", "react-dom@^16.7.0 || ^17", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.1", "react-dom@>=16.6.0":
   "integrity" "sha512-6eV150oJZ9U2t9svnsspTMrWNyHc6chX0KzDeAOXftRa8bNeOKTTfCJ7KorIwenkHd2xqVTBTCZd79yk/lx/Ug=="
   "resolved" "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.1.tgz"
   "version" "17.0.1"
@@ -11016,7 +11024,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@*", "react@^16.8.0 || ^17.0.0", "react@^17.0.1", "react@>=16.6.0", "react@17.0.1":
+"react@*", "react@^16.7.0 || ^17", "react@^16.8.0 || ^17.0.0", "react@^17.0.1", "react@>=16.6.0", "react@17.0.1":
   "integrity" "sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w=="
   "resolved" "https://registry.yarnpkg.com/react/-/react-17.0.1.tgz"
   "version" "17.0.1"
