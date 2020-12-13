@@ -34,15 +34,53 @@ class App extends Component{
           memo: "頑張ります！！",
           open: false,
         }
-
       ]
     }
+    this.doChange = this.doChange.bind(this)
+    this.doSubmit = this.doSubmit.bind(this)
+  }
+
+  doChange(e){
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  doSubmit(e){
+    e.preventDefault();
+    this.setState({
+      myEvents: [
+        ...this.state.myEvents, 
+        {
+          id: this.state.myEvents.length,
+          title: this.state.title, 
+          start: this.state.start,
+          end: this.state.end,
+          memo: this.state.memo,
+          open: false,
+        }
+      ],
+      title: "",
+      start: "",
+      end: "",
+      memo: ""
+    });
+
   }
 
   render(){
     return(
       <div>
         <h1>タスク管理アプリ</h1>
+        <label>タイトル：</label>
+        <input type="text" name="title" value={this.state.title} onChange={this.doChange}/><br/>
+        <label>開始時間：</label>
+        <input type="datetime-local" name="start" value={this.state.start} onChange={this.doChange}/><br/>
+        <label>終了時間：</label>
+        <input type="datetime-local" name="end" value={this.state.end} onChange={this.doChange}/><br/>
+        <label>　メモ　：</label>
+        <input type="text" name="memo" value={this.state.memo} onChange={this.doChange}/>
+        <button onClick={this.doSubmit}>追加</button>
         <FullCalendar 
           locale="ja"
           initialView="timeGridWeek"
