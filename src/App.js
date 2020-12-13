@@ -48,6 +48,7 @@ class App extends Component{
     this.doOpen = this.doOpen.bind(this)
     this.doClose = this.doClose.bind(this)
     this.doUpdate = this.doUpdate.bind(this)
+    this.doDelete = this.doDelete.bind(this)
   }
 
   doChange(e){
@@ -62,7 +63,7 @@ class App extends Component{
       myEvents: [
         ...this.state.myEvents, 
         {
-          id: this.state.myEvents.length,
+          id: this.state.myEvents.length + 1,
           title: this.state.title, 
           start: this.state.start,
           end: this.state.end,
@@ -132,6 +133,27 @@ class App extends Component{
     alert("予定を変更しました！");
     this.doClose();
   }
+
+  doDelete(){
+    const selEvent = this.state.myEvents[this.selEventID - 1];
+    const myEventsCopy = this.state.myEvents.slice();
+    myEventsCopy[this.selEventID - 1] = {
+      id: selEvent.id,
+      title: this.state.inputTitle,
+      memo: this.state.inputMemo,
+      start: null,
+      end: null,
+      open: false,
+    }
+
+    this.setState({
+      myEvents: myEventsCopy
+    });
+    alert("予定を削除しました！");
+    this.doClose();
+
+  }
+
 
   render(){
 
