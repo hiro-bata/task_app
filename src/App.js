@@ -47,6 +47,7 @@ class App extends Component{
     this.doSubmit = this.doSubmit.bind(this)
     this.doOpen = this.doOpen.bind(this)
     this.doClose = this.doClose.bind(this)
+    this.doUpdate = this.doUpdate.bind(this)
   }
 
   doChange(e){
@@ -114,7 +115,28 @@ class App extends Component{
     return ("0" + number).slice(-2);
   }
 
+  doUpdate(){
+    const selEvent = this.state.myEvents[this.selEventID - 1];
+    const myEvents_copy = this.state.myEvents.slice();
+    myEvents_copy[this.selEventID - 1] = {
+      id: selEvent.id,
+      title: this.state.inputTitle,
+      memo: this.state.inputMemo,
+      start: this.state.inputStart,
+      end: this.state.inputEnd,
+      open: false,
+    }
+    this.setState({
+      myEvents: myEvents_copy
+    })    
+    alert("予定を変更しました！");
+    this.doClose();
+  }
+
   render(){
+
+    console.log(this.state.myEvents)
+
     return(
       <div>
         <h1>タスク管理アプリ</h1>
