@@ -49,8 +49,6 @@ class App extends Component{
     this.doClose = this.doClose.bind(this)
     this.doUpdate = this.doUpdate.bind(this)
     this.doDelete = this.doDelete.bind(this)
-
-
   }
 
   doChange(e){
@@ -156,7 +154,7 @@ class App extends Component{
 
   }
   
-  
+
 
   render(){
 
