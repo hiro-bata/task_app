@@ -3,6 +3,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 class App extends Component{
 
@@ -38,6 +45,8 @@ class App extends Component{
     }
     this.doChange = this.doChange.bind(this)
     this.doSubmit = this.doSubmit.bind(this)
+    this.doOpen = this.doOpen.bind(this)
+    this.doClose = this.doClose.bind(this)
   }
 
   doChange(e){
@@ -65,7 +74,44 @@ class App extends Component{
       end: "",
       memo: ""
     });
+  }
 
+  doOpen(info){
+    this.selEventID = info.event.id;
+    const selEvent = this.state.myEvents[info.event.id - 1];
+    const title = selEvent.title;
+    const memo = selEvent.memo;
+    const start = new Date(selEvent.start);
+    const starttime = this.changeDateToString(start)
+    const end = new Date(selEvent.end);
+    const endtime = this.changeDateToString(end)
+
+    this.setState({ inputTitle: title });
+    this.setState({ inputMemo: memo });
+    this.setState({ inputStart: starttime });
+    this.setState({ inputEnd: endtime });
+    this.setState({open: true})
+  }
+
+  doClose(){
+    this.setState({
+      open: false,
+    })
+  };
+
+  changeDateToString(dt) {
+    const year = dt.getFullYear();
+    const month = this.getdoubleDigestNumer(dt.getMonth() + 1);
+    const date = this.getdoubleDigestNumer(dt.getDate());
+    const hour = this.getdoubleDigestNumer(dt.getHours());
+    const minutes = this.getdoubleDigestNumer(dt.getMinutes());
+
+    const retDate = `${year}-${month}-${date} ${hour}:${minutes}:00`;
+    return retDate;
+  }
+
+  getdoubleDigestNumer(number) {
+    return ("0" + number).slice(-2);
   }
 
   render(){
@@ -107,8 +153,54 @@ class App extends Component{
           weekends={true}
           events={this.state.myEvents} 
           // select={this.handleSelect} 
-          // eventClick={this.doOpen}
+          eventClick={this.doOpen}
         />
+        <Dialog
+          open={this.state.open? true : false}
+          onClose={this.doClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">{"今日の予定"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            タイトル：{this.state.inputTitle}<br/>
+            開始時間：{this.state.inputStart}<br/>
+            終了時間：{this.state.inputEnd}<br/>
+            メモ：{this.state.inputMemo}<br/>
+            <form>
+                タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange=
+                {
+                  (e) => {this.setState({ inputTitle: e.target.value });}
+                }
+              /><br/>
+                開始時間：<input type="text" name="inputStart" value={this.state.inputStart} onChange=
+                {
+                  (e) => {this.setState({ inputStart: e.target.value });}
+                }
+              /><br/>
+                終了時間：<input type="text" name="inputEnd" value={this.state.inputEnd} onChange=
+                {
+                  (e) => {this.setState({ inputEnd: e.target.value });}
+                }
+              /><br/>
+                  メモ：<input type="text" name="inputMemo" value={this.state.inputMemo} onChange=
+                {
+                  (e) => {this.setState({ inputMemo: e.target.value });}
+                }
+              /><br/>
+              <input type="button" value="変更" onClick={this.doUpdate} />
+              <input type="button" value="削除" onClick={this.doDelete} />
+            </form>    
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.doClose} color="primary">
+            閉じる
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       </div>
     );
   };
