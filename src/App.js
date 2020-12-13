@@ -10,7 +10,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-
 class App extends Component{
 
   constructor(props){
@@ -41,6 +40,7 @@ class App extends Component{
           memo: "頑張ります！！",
           open: false,
         }
+
       ]
     }
     this.doChange = this.doChange.bind(this)
@@ -153,7 +153,8 @@ class App extends Component{
     this.doClose();
 
   }
-
+  
+  
 
   render(){
 
@@ -244,7 +245,6 @@ class App extends Component{
           </Button>
         </DialogActions>
       </Dialog>
-
       </div>
     );
   };
