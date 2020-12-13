@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+
 class App extends Component{
 
   constructor(props){
@@ -48,6 +49,8 @@ class App extends Component{
     this.doClose = this.doClose.bind(this)
     this.doUpdate = this.doUpdate.bind(this)
     this.doDelete = this.doDelete.bind(this)
+
+
   }
 
   doChange(e){
@@ -63,34 +66,6 @@ class App extends Component{
         ...this.state.myEvents, 
         {
           id: this.state.myEvents.length,
-          title: this.state.title, 
-          start: this.state.start,
-          end: this.state.end,
-          memo: this.state.memo,
-          open: false,
-        }
-      ],
-      title: "",
-      start: "",
-      end: "",
-      memo: ""
-    });
-
-  }
-
-  doChange(e){
-    this.setState({
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  doSubmit(e){
-    e.preventDefault();
-    this.setState({
-      myEvents: [
-        ...this.state.myEvents, 
-        {
-          id: this.state.myEvents.length + 1,
           title: this.state.title, 
           start: this.state.start,
           end: this.state.end,
