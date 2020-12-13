@@ -40,7 +40,6 @@ class App extends Component{
           memo: "頑張ります！！",
           open: false,
         }
-
       ]
     }
     this.doChange = this.doChange.bind(this)
@@ -49,6 +48,34 @@ class App extends Component{
     this.doClose = this.doClose.bind(this)
     this.doUpdate = this.doUpdate.bind(this)
     this.doDelete = this.doDelete.bind(this)
+  }
+
+  doChange(e){
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  doSubmit(e){
+    e.preventDefault();
+    this.setState({
+      myEvents: [
+        ...this.state.myEvents, 
+        {
+          id: this.state.myEvents.length,
+          title: this.state.title, 
+          start: this.state.start,
+          end: this.state.end,
+          memo: this.state.memo,
+          open: false,
+        }
+      ],
+      title: "",
+      start: "",
+      end: "",
+      memo: ""
+    });
+
   }
 
   doChange(e){
