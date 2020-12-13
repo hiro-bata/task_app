@@ -63,7 +63,7 @@ class App extends Component{
       myEvents: [
         ...this.state.myEvents, 
         {
-          id: this.state.myEvents.length,
+          id: this.state.myEvents.length + 1,
           title: this.state.title, 
           start: this.state.start,
           end: this.state.end,
@@ -153,8 +153,6 @@ class App extends Component{
     this.doClose();
 
   }
-  
-
 
   render(){
 
