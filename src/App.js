@@ -24,6 +24,7 @@ class App extends Component{
           end: "2020-12-14 11:00:00",
           memo: "頑張ります！！",
           open: false,
+          addForm: false
         },
         {
           id: 2,
@@ -32,6 +33,7 @@ class App extends Component{
           end: "2020-12-15 11:00:00",
           memo: "頑張ります！！",
           open: false,
+          addForm: false
         },
         {
           id: 3,
@@ -40,15 +42,18 @@ class App extends Component{
           end: "2020-12-16 11:00:00",
           memo: "頑張ります！！",
           open: false,
+          addForm: false
         }
       ]
     }
     this.doChange = this.doChange.bind(this)
-    this.doSubmit = this.doSubmit.bind(this)
+    this.doAddTask = this.doAddTask.bind(this)
     this.doOpen = this.doOpen.bind(this)
     this.doClose = this.doClose.bind(this)
     this.doUpdate = this.doUpdate.bind(this)
     this.doDelete = this.doDelete.bind(this)
+    this.doSelect = this.doSelect.bind(this)
+    this.doSelectAddTask = this.doSelectAddTask.bind(this)
   }
 
   doChange(e){
@@ -57,7 +62,7 @@ class App extends Component{
     })
   }
 
-  doSubmit(e){
+  doAddTask(e){
     e.preventDefault();
     this.setState({
       myEvents: [
@@ -69,6 +74,7 @@ class App extends Component{
           end: this.state.end,
           memo: this.state.memo,
           open: false,
+          addForm: false
         }
       ],
       title: "",
@@ -76,6 +82,8 @@ class App extends Component{
       end: "",
       memo: ""
     });
+    alert("予定を追加しました！");
+    this.doClose();
   }
 
   doOpen(info){
@@ -93,6 +101,7 @@ class App extends Component{
     this.setState({ inputStart: starttime });
     this.setState({ inputEnd: endtime });
     this.setState({open: true})
+    this.setState({addForm: false})
   }
 
   doClose(){
@@ -126,12 +135,14 @@ class App extends Component{
       start: this.state.inputStart,
       end: this.state.inputEnd,
       open: false,
+      addForm: false
     }
     this.setState({
       myEvents: myEvents_copy
     })    
     alert("予定を変更しました！");
     this.doClose();
+    
   }
 
   doDelete(){
@@ -144,6 +155,7 @@ class App extends Component{
       start: null,
       end: null,
       open: false,
+      addForm: false
     }
 
     this.setState({
@@ -151,9 +163,90 @@ class App extends Component{
     });
     alert("予定を削除しました！");
     this.doClose();
-
   }
 
+  doSelect(selectInfo){
+    let start = new Date(selectInfo.start);
+    const starttime = this.changeDateToString(start)
+    let end = new Date(selectInfo.end);
+    const endtime = this.changeDateToString(end)
+    start.setHours(start.getHours());
+    end.setHours(start.getHours());
+
+    this.setState({ inputTitle: "" });
+    this.setState({ inputMemo: "" });
+    this.setState({ inputStart: starttime });
+    this.setState({ inputEnd: endtime });
+    this.setState({open: true})
+    this.setState({addForm: true})
+  }
+
+  doUpdateForm = () => {
+    return(
+      <div>
+        タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange=
+                  {
+                    (e) => {this.setState({ inputTitle: e.target.value });}
+                  }
+                /><br/>
+        開始時間：<input type="text" name="inputStart" value={this.state.inputStart} onChange=
+                  {
+                    (e) => {this.setState({ inputStart: e.target.value });}
+                  }
+                /><br/>
+        終了時間：<input type="text" name="inputEnd" value={this.state.inputEnd} onChange=
+                  {
+                    (e) => {this.setState({ inputEnd: e.target.value });}
+                  }
+                /><br/>
+        メモ：<input type="text" name="inputMemo" value={this.state.inputMemo} onChange=
+                  {
+                    (e) => {this.setState({ inputMemo: e.target.value });}
+                  }
+                /><br/>
+                <input type="button" value="変更" onClick={this.doUpdate} />
+                <input type="button" value="削除" onClick={this.doDelete} />
+      </div>
+    );  
+  }
+
+  doAddForm = () => {
+    return(
+      <div>
+        タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange={this.doChange}/><br/>
+        開始時間：<input type="text" name="inputStart" value={this.state.inputStart} onChange={this.doChange}/><br/>
+        終了時間：<input type="text" name="inputEnd" value={this.state.inputEnd} onChange={this.doChange}/><br/>
+        メモ：<input type="text" name="inputMemo" value={this.state.inputMemo} onChange={this.doChange}/><br/>
+        <input type="button" value="追加" onClick={this.doSelectAddTask} />
+      </div>
+    );  
+  }
+
+  doSelectAddTask(e){
+    e.preventDefault();
+    this.setState({
+      myEvents: [
+        ...this.state.myEvents, 
+        {
+          id: this.state.myEvents.length + 1,
+          title: this.state.inputTitle, 
+          start: this.state.inputStart,
+          end: this.state.inputEnd,
+          memo: this.state.inputMemo,
+          open: false,
+          addForm: false
+        }
+      ],
+      title: "",
+      start: "",
+      end: "",
+      memo: ""
+    });
+    alert("予定を追加しました！");
+    this.doClose();
+  };
+
+  
   render(){
 
     console.log(this.state.myEvents)
@@ -169,7 +262,7 @@ class App extends Component{
         <input type="datetime-local" name="end" value={this.state.end} onChange={this.doChange}/><br/>
         <label>　メモ　：</label>
         <input type="text" name="memo" value={this.state.memo} onChange={this.doChange}/>
-        <button onClick={this.doSubmit}>追加</button>
+        <button onClick={this.doAddTask}>追加</button>
         <FullCalendar 
           locale="ja"
           initialView="timeGridWeek"
@@ -195,7 +288,7 @@ class App extends Component{
           ref={this.ref}
           weekends={true}
           events={this.state.myEvents} 
-          // select={this.handleSelect} 
+          select={this.doSelect} 
           eventClick={this.doOpen}
         />
         <Dialog
@@ -212,28 +305,7 @@ class App extends Component{
             終了時間：{this.state.inputEnd}<br/>
             メモ：{this.state.inputMemo}<br/>
             <form>
-                タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange=
-                {
-                  (e) => {this.setState({ inputTitle: e.target.value });}
-                }
-              /><br/>
-                開始時間：<input type="text" name="inputStart" value={this.state.inputStart} onChange=
-                {
-                  (e) => {this.setState({ inputStart: e.target.value });}
-                }
-              /><br/>
-                終了時間：<input type="text" name="inputEnd" value={this.state.inputEnd} onChange=
-                {
-                  (e) => {this.setState({ inputEnd: e.target.value });}
-                }
-              /><br/>
-                  メモ：<input type="text" name="inputMemo" value={this.state.inputMemo} onChange=
-                {
-                  (e) => {this.setState({ inputMemo: e.target.value });}
-                }
-              /><br/>
-              <input type="button" value="変更" onClick={this.doUpdate} />
-              <input type="button" value="削除" onClick={this.doDelete} />
+              {this.state.addForm ?  this.doAddForm() : this.doUpdateForm()}
             </form>    
           </DialogContentText>
         </DialogContent>
