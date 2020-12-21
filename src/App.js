@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import firebase from "firebase";
+import Add from "./components/Add";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCV5yWlgIbafx7jPDHOFLOUntCFEONXtDo",
@@ -31,33 +32,33 @@ class App extends Component{
     super(props);
     this.state = {
       myEvents: [
-        {
-          id: 1,
-          title: "sample 1",
-          start: "2020-12-14 10:00:00",
-          end: "2020-12-14 11:00:00",
-          memo: "頑張ります！！",
-          open: false,
-          addForm: false
-        },
-        {
-          id: 2,
-          title: "sample 2",
-          start: "2020-12-15 10:00:00",
-          end: "2020-12-15 11:00:00",
-          memo: "頑張ります！！",
-          open: false,
-          addForm: false
-        },
-        {
-          id: 3,
-          title: "sample 3",
-          start: "2020-12-16 10:00:00",
-          end: "2020-12-16 11:00:00",
-          memo: "頑張ります！！",
-          open: false,
-          addForm: false
-        }
+        // {
+        //   id: 1,
+        //   title: "sample 1",
+        //   start: "2020-12-14 10:00:00",
+        //   end: "2020-12-14 11:00:00",
+        //   memo: "頑張ります！！",
+        //   open: false,
+        //   addForm: false
+        // },
+        // {
+        //   id: 2,
+        //   title: "sample 2",
+        //   start: "2020-12-15 10:00:00",
+        //   end: "2020-12-15 11:00:00",
+        //   memo: "頑張ります！！",
+        //   open: false,
+        //   addForm: false
+        // },
+        // {
+        //   id: 3,
+        //   title: "sample 3",
+        //   start: "2020-12-16 10:00:00",
+        //   end: "2020-12-16 11:00:00",
+        //   memo: "頑張ります！！",
+        //   open: false,
+        //   addForm: false
+        // }
       ]
     }
     this.doChange = this.doChange.bind(this)
@@ -67,7 +68,11 @@ class App extends Component{
     this.doUpdate = this.doUpdate.bind(this)
     this.doDelete = this.doDelete.bind(this)
     this.doSelect = this.doSelect.bind(this)
-    this.doSelectAddTask = this.doSelectAddTask.bind(this)
+    // this.doSelectAddTask = this.doSelectAddTask.bind(this)
+    this.getFireData = this.getFireData.bind(this)
+    this.doAddForm = this.doAddForm.bind(this)
+    this.doAction = this.doAction.bind(this)
+    this.getLastID = this.getLastID.bind(this)
   }
 
   doChange(e){
@@ -102,7 +107,7 @@ class App extends Component{
 
   doOpen(info){
     this.selEventID = info.event.id;
-    const selEvent = this.state.myEvents[info.event.id - 1];
+    const selEvent = this.state.myEvents[info.event.id];
     const title = selEvent.title;
     const memo = selEvent.memo;
     const start = new Date(selEvent.start);
@@ -140,9 +145,9 @@ class App extends Component{
   }
 
   doUpdate(){
-    const selEvent = this.state.myEvents[this.selEventID - 1];
+    const selEvent = this.state.myEvents[this.selEventID];
     const myEvents_copy = this.state.myEvents.slice();
-    myEvents_copy[this.selEventID - 1] = {
+    myEvents_copy[this.selEventID] = {
       id: selEvent.id,
       title: this.state.inputTitle,
       memo: this.state.inputMemo,
@@ -151,32 +156,44 @@ class App extends Component{
       open: false,
       addForm: false
     }
-    this.setState({
-      myEvents: myEvents_copy
-    })    
-    alert("予定を変更しました！");
-    this.doClose();
-    
+    // this.setState({
+    //   myEvents: myEvents_copy
+    // })    
+    // alert("予定を変更しました！");
+    // this.doClose();
+
+    const updates = {};
+    updates['/myEvents/'] = myEvents_copy;
+    return firebase.database().ref().update(updates),
+    alert("予定を変更しました！"),
+    this.doClose();    
   }
 
   doDelete(){
-    const selEvent = this.state.myEvents[this.selEventID - 1];
-    const myEventsCopy = this.state.myEvents.slice();
-    myEventsCopy[this.selEventID - 1] = {
-      id: selEvent.id,
-      title: this.state.inputTitle,
-      memo: this.state.inputMemo,
-      start: null,
-      end: null,
-      open: false,
-      addForm: false
+    const selEvent = this.state.myEvents[this.selEventID];
+    const myEvents_copy = this.state.myEvents.slice();
+    myEvents_copy[this.selEventID] = {
+      id: "deleted",
+      title: "deleted",
+      memo: "deleted",
+      start: "deleted",
+      end: "deleted",
+      open: "deleted",
+      addForm: "deleted"
     }
 
-    this.setState({
-      myEvents: myEventsCopy
-    });
-    alert("予定を削除しました！");
+    // this.setState({
+    //   myEvents: myEventsCopy
+    // });
+    // alert("予定を削除しました！");
+    // this.doClose();
+
+    const updates = {};
+    updates['/myEvents/'] = myEvents_copy;
+    return firebase.database().ref().update(updates),
+    alert("予定を削除しました！"),
     this.doClose();
+
   }
 
   doSelect(selectInfo){
@@ -227,56 +244,107 @@ class App extends Component{
   doAddForm = () => {
     return(
       <div>
-        タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange={this.doChange}/><br/>
+        {/* タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange={this.doChange}/><br/>
         開始時間：<input type="text" name="inputStart" value={this.state.inputStart} onChange={this.doChange}/><br/>
         終了時間：<input type="text" name="inputEnd" value={this.state.inputEnd} onChange={this.doChange}/><br/>
         メモ：<input type="text" name="inputMemo" value={this.state.inputMemo} onChange={this.doChange}/><br/>
-        <input type="button" value="追加" onClick={this.doSelectAddTask} />
+        <input type="button" value="追加" onClick={this.doSelectAddTask} /> */}
+        <Add inputStart={this.state.inputStart} inputEnd={this.state.inputEnd} doClose={this.doClose} />
       </div>
     );  
   }
 
-  doSelectAddTask(e){
-    e.preventDefault();
-    this.setState({
-      myEvents: [
-        ...this.state.myEvents, 
-        {
-          id: this.state.myEvents.length + 1,
-          title: this.state.inputTitle, 
-          start: this.state.inputStart,
-          end: this.state.inputEnd,
-          memo: this.state.inputMemo,
-          open: false,
-          addForm: false
+  doAction(e){
+    this.addFireData();
+  }
+
+  getLastID() {
+    let db = firebase.database();
+    let ref = db.ref("myEvents/");
+    let self = this;
+    ref
+      .orderByKey()
+      .limitToLast(1)
+      .on("value", snapshot => {
+        let res = snapshot.val();
+        for (let i in res) {
+          self.setState({
+            lastID: i
+          });
+          return;
         }
-      ],
-      title: "",
-      start: "",
-      end: "",
-      memo: ""
+      });
+  }
+
+  addFireData() {
+    if (this.state.lastID == -1) {
+      return;
+    }
+    let id = this.state.lastID * 1 + 1;
+    let db = firebase.database();
+    let ref = db.ref("/myEvents/" + id);
+    ref.set({
+      id: id,
+      // id: this.state.myEvents.length + 1,
+      title: this.state.inputTitle,
+      start: this.state.inputStart,
+      end: this.state.inputEnd,
+      memo: this.state.inputMemo,
+      open: false,
+      addForm: false
     });
-    alert("予定を追加しました！");
-    this.doClose();
-  };
+  }
+
+  getFireData() {
+    let db = firebase.database();
+    let ref = db.ref("myEvents/");
+    let self = this;
+    ref
+      .orderByKey()
+      .limitToFirst(10)
+      .on("value", snapshot => {
+        self.setState({
+          myEvents: snapshot.val()
+        });
+      });
+  }
+
+
+  // doSelectAddTask(e){
+  //   e.preventDefault();
+  //   this.setState({
+  //     myEvents: [
+  //       ...this.state.myEvents, 
+  //       {
+  //         id: this.state.myEvents.length + 1,
+  //         title: this.state.inputTitle, 
+  //         start: this.state.inputStart,
+  //         end: this.state.inputEnd,
+  //         memo: this.state.inputMemo,
+  //         open: false,
+  //         addForm: false
+  //       }
+  //     ],
+  //     title: "",
+  //     start: "",
+  //     end: "",
+  //     memo: ""
+  //   });
+  //   alert("予定を追加しました！");
+  //   this.doClose();
+  // };
 
   
   render(){
-
     console.log(this.state.myEvents)
+    if (this.state.myEvents.length == 0) {
+      this.getFireData();
+    }
 
     return(
       <div>
         <h1>タスク管理アプリ</h1>
-        <label>タイトル：</label>
-        <input type="text" name="title" value={this.state.title} onChange={this.doChange}/><br/>
-        <label>開始時間：</label>
-        <input type="datetime-local" name="start" value={this.state.start} onChange={this.doChange}/><br/>
-        <label>終了時間：</label>
-        <input type="datetime-local" name="end" value={this.state.end} onChange={this.doChange}/><br/>
-        <label>　メモ　：</label>
-        <input type="text" name="memo" value={this.state.memo} onChange={this.doChange}/>
-        <button onClick={this.doAddTask}>追加</button>
+        <Add doClose={this.doClose}/>
         <FullCalendar 
           locale="ja"
           initialView="timeGridWeek"
