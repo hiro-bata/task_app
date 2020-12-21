@@ -9,6 +9,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import firebase from "firebase";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCV5yWlgIbafx7jPDHOFLOUntCFEONXtDo",
+  authDomain: "task-6c135.firebaseapp.com",
+  databaseURL: "https://task-6c135-default-rtdb.firebaseio.com",
+  projectId: "task-6c135",
+  storageBucket: "task-6c135.appspot.com",
+  messagingSenderId: "653620669950",
+  appId: "1:653620669950:web:7d792ff0c41f7e330624af",
+  measurementId: "G-Q4LZ6DHEL8"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 
 class App extends Component{
