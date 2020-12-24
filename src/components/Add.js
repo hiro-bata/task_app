@@ -77,7 +77,7 @@ class Add extends Component {
       console.log(this.state.start)
       return (
         <div>
-          <label>タイトル：</label>
+          <label>タスク名：</label>
           <input
             type="text"
             name="title"

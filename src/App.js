@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import firebase from "firebase";
 import Add from "./components/Add";
+import './App.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCV5yWlgIbafx7jPDHOFLOUntCFEONXtDo",
@@ -175,7 +176,7 @@ class App extends Component{
   doUpdateForm = () => {
     return(
       <div>
-        タイトル：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange=
+        タスク名：<input type="text" name="inputTitle" value={this.state.inputTitle} onChange=
                   {
                     (e) => {this.setState({ inputTitle: e.target.value });}
                   }
@@ -270,8 +271,8 @@ class App extends Component{
     }
 
     return(
-      <div>
-        <h1>タスク管理アプリ</h1>
+      <div id="App">
+        <h1>Task App</h1>
         <Add doClose={this.doClose}/>
         <FullCalendar 
           locale="ja"
@@ -310,7 +311,7 @@ class App extends Component{
         <DialogTitle id="alert-dialog-title">{"今日の予定"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            タイトル：{this.state.inputTitle}<br/>
+            タスク名：{this.state.inputTitle}<br/>
             開始時間：{this.state.inputStart}<br/>
             終了時間：{this.state.inputEnd}<br/>
             メモ：{this.state.inputMemo}<br/>
