@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import firebase from "firebase";
 import Add from "./components/Add";
+import Auth from "./components/Auth"
 import './App.css';
 
 const firebaseConfig = {
@@ -32,7 +33,8 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      myEvents: []
+      myEvents: [],
+      openAddForm: false
     }
     this.doChange = this.doChange.bind(this)
     this.doAddTask = this.doAddTask.bind(this)
@@ -45,6 +47,8 @@ class App extends Component{
     this.doAddForm = this.doAddForm.bind(this)
     this.doAction = this.doAction.bind(this)
     this.getLastID = this.getLastID.bind(this)
+    this.openAddForm = this.openAddForm.bind(this)
+    this.doCloseOpenAddForm = this.doCloseOpenAddForm.bind(this)
   }
 
   doChange(e){
@@ -263,9 +267,22 @@ class App extends Component{
         });
       });
   }
+
+  openAddForm(){
+    this.setState({
+      openAddForm: true
+    })
+  }
+
+  doCloseOpenAddForm(){
+    this.setState({
+      openAddForm: false
+    })
+  }
+
   
   render(){
-    console.log(this.state.myEvents)
+    
     if (this.state.myEvents.length == 0) {
       this.getFireData();
     }
@@ -273,7 +290,10 @@ class App extends Component{
     return(
       <div id="App">
         <h1>Task App</h1>
-        <Add doClose={this.doClose}/>
+        <div>
+          <Auth /><br/>
+          <button onClick={this.openAddForm}>管理人ページ</button>
+        </div>
         <FullCalendar 
           locale="ja"
           initialView="timeGridWeek"
@@ -315,13 +335,35 @@ class App extends Component{
             開始時間：{this.state.inputStart}<br/>
             終了時間：{this.state.inputEnd}<br/>
             メモ：{this.state.inputMemo}<br/>
-            <form>
-              {this.state.addForm ?  this.doAddForm() : this.doUpdateForm()}
-            </form>    
+            {localStorage.getItem("token")? 
+              <form>
+                {this.state.addForm ?  this.doAddForm() : this.doUpdateForm()}
+              </form>    
+            :
+              ""
+            }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.doClose} color="primary">
+            閉じる
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+          open={this.state.openAddForm? true : false}
+          onClose={this.doCloseOpenAddForm}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">{localStorage.getItem("token")? "予定追加" : "管理人ページ"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {localStorage.getItem("token")? <Add doCloseOpenAddForm={this.doCloseOpenAddForm}/> : "管理人のみ"}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.doCloseOpenAddForm} color="primary">
             閉じる
           </Button>
         </DialogActions>
