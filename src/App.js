@@ -260,7 +260,7 @@ class App extends Component{
     let self = this;
     ref
       .orderByKey()
-      .limitToFirst(10)
+      // .limitToFirst(10)
       .on("value", snapshot => {
         self.setState({
           myEvents: snapshot.val()

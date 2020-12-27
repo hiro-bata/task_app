@@ -66,7 +66,7 @@ class Add extends Component {
         addForm: false
       });
       alert("予定を追加しました！");
-      this.props.doClose();  
+      this.props.doCloseOpenAddForm();  
     }
   
     render() {
