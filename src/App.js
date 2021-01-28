@@ -290,6 +290,7 @@ class App extends Component{
     return(
       <div id="App">
         <h1>Task App</h1>
+        <h2>＊管理人の生活を公開中</h2>
         <div>
           <Auth /><br/>
           <button onClick={this.openAddForm}>管理人ページ</button>
